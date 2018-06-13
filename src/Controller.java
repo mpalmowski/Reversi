@@ -31,6 +31,7 @@ public class Controller implements Runnable{
 
         while (true) {
             view.render(model);
+            model.tick();
             framesPerSecond++;
 
             if (System.currentTimeMillis() - timer > 1000) {

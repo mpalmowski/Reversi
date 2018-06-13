@@ -12,6 +12,7 @@ class Model {
     private int pawn_size;
     private Image whitePawn, blackPawn;
     private PawnColor turn = PawnColor.white;
+    private static final PawnColor computerColor = PawnColor.black;
     private Board board;
 
     Model(Controller controller) {
@@ -53,18 +54,20 @@ class Model {
         return blackPawn;
     }
 
+    void tick(){
+        if(turn == computerColor){
+            computersMove();
+            switchTurn();
+        }
+    }
+
     void FieldChosen(int x, int y) {
-        if(turn == PawnColor.black)
+        if(turn == computerColor)
             return;
         int verse = getVerse(y);
         int column = getColumn(x);
         if (board.get(verse,column) == null) {
             addPawn(verse, column, turn);
-            switchTurn();
-        }
-
-        if(turn == PawnColor.black){
-            computersMove();
             switchTurn();
         }
     }
