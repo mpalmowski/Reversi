@@ -13,7 +13,10 @@ public class Board {
     void copy(Board other) {
         for (int i = 0; i < size; ++i) {
             for (int j = 0; j < size; ++j) {
-                pawns[i][j] = other.get(i, j);
+                if(other.get(i,j) == null)
+                    pawns[i][j] = null;
+                else
+                    pawns[i][j] = new Pawn(other.get(i, j));
             }
         }
     }
@@ -101,7 +104,7 @@ public class Board {
 
             pawns[v][c] = new Pawn(color);
 
-            max = predictMoves(3, true, color == PawnColor.white ? PawnColor.black : PawnColor.white);
+            max = predictMoves(1, true, color == PawnColor.white ? PawnColor.black : PawnColor.white);
 
             move.setPoints(-max);
             move.setPoints(move.getPoints() + valueMove(move));

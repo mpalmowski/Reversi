@@ -2,7 +2,7 @@ import java.awt.*;
 
 class Background {
 
-    private int width =0, height = 0;
+    private int width, height;
     private Image image;
 
     Background(Image image, int width, int height){

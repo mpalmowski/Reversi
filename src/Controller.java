@@ -3,6 +3,7 @@ public class Controller implements Runnable{
     private Model model;
     private static final int width = 300, height = 300;
     private boolean running = true;
+    private long timer;
 
     Controller(){
 
@@ -27,18 +28,14 @@ public class Controller implements Runnable{
 
     @Override
     public void run() {
-        long timer = System.currentTimeMillis();
-        int framesPerSecond = 0;
+        timer = System.currentTimeMillis();
 
         while (running) {
             view.render(model);
-            framesPerSecond++;
 
-            if (System.currentTimeMillis() - timer > 1000) {
+            if (System.currentTimeMillis() - timer > 300) {
                 model.tick();
                 timer = System.currentTimeMillis();
-                System.out.print("FPS: " + framesPerSecond + System.lineSeparator());
-                framesPerSecond = 0;
             }
         }
         int userScore = model.getUserScore(), compScore = model.getComputerScore();
@@ -49,6 +46,7 @@ public class Controller implements Runnable{
 
     public void handleMousePressed(int x, int y) {
         model.FieldChosen(x, y);
+        timer = System.currentTimeMillis();
     }
 
     public void stop(){

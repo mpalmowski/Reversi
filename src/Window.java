@@ -5,7 +5,7 @@ import java.awt.*;
  * Main window of the application
  */
 class Window extends Canvas {
-    JFrame frame;
+    private JFrame frame;
 
     Window(int width, int height, String title, View view) {
         frame = new JFrame(title);

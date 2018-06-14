@@ -2,7 +2,7 @@ public class Player {
     private PawnColor color;
     private int score = 0;
 
-    public Player(PawnColor color) {
+    Player(PawnColor color) {
         this.color = color;
     }
 

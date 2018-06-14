@@ -7,7 +7,7 @@ class Pawn {
     private Model model = null;
     private PawnColor color;
 
-    public Pawn(int x, int y, int size, Model model, PawnColor color) {
+    Pawn(int x, int y, int size, Model model, PawnColor color) {
         this.x = x;
         this.y = y;
         this.size = size;
@@ -15,7 +15,15 @@ class Pawn {
         this.color = color;
     }
 
-    public Pawn(PawnColor color){
+    Pawn(Pawn other){
+        this.x = other.x;
+        this.y = other.y;
+        this.size = other.size;
+        this.model = other.model;
+        this.color = other.color;
+    }
+
+    Pawn(PawnColor color){
         this.color = color;
     }
 

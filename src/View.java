@@ -4,7 +4,7 @@ import java.awt.image.BufferStrategy;
 
 public class View extends Canvas {
     private int width, height;
-    Window window;
+    private Window window;
 
     View(int width, int height){
         this.width = width;
