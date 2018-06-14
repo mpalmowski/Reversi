@@ -98,9 +98,7 @@ class Model {
     }
 
     private void computersMove(){
-        Board tempBoard = new Board(boardSize);
-        tempBoard.copy(board);
-        Move bestMove = tempBoard.minMax(activePlayer.getColor());
+        Move bestMove = board.minMax(activePlayer.getColor());
         if(bestMove.getVerse() == -1)
             return;
         addPawn(bestMove.getVerse(), bestMove.getColumn(), activePlayer.getColor());
