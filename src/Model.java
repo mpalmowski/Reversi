@@ -11,8 +11,8 @@ class Model {
     private int width, height;
     private int pawn_size;
     private Image whitePawn, blackPawn;
-    private PawnColor turn = PawnColor.white;
-    private static final PawnColor computerColor = PawnColor.black;
+    private Player user = new Player(PawnColor.white), computer = new Player(PawnColor.black);
+    private Player activePlayer = user;
     private Board board;
 
     Model(Controller controller) {
@@ -55,19 +55,19 @@ class Model {
     }
 
     void tick(){
-        if(turn == computerColor){
+        if(activePlayer == computer){
             computersMove();
             switchTurn();
         }
     }
 
     void FieldChosen(int x, int y) {
-        if(turn == computerColor)
+        if(activePlayer == computer)
             return;
         int verse = getVerse(y);
         int column = getColumn(x);
         if (board.get(verse,column) == null) {
-            if(addPawn(verse, column, turn))
+            if(addPawn(verse, column, activePlayer.getColor()))
                 switchTurn();
         }
     }
@@ -86,19 +86,43 @@ class Model {
     }
 
     private void switchTurn() {
-        if (turn == PawnColor.white)
-            turn = PawnColor.black;
+        if (activePlayer == user)
+            activePlayer = computer;
         else
-            turn = PawnColor.white;
+            activePlayer = user;
+
+        updateScore();
+        if(!board.movePossible(activePlayer.getColor()))
+            controller.stop();
     }
 
     private void computersMove(){
         Board tempBoard = new Board(boardSize);
         tempBoard.copy(board);
-        Move bestMove = tempBoard.minMax(turn);
+        Move bestMove = tempBoard.minMax(activePlayer.getColor());
         if(bestMove.getVerse() == -1)
             return;
-        System.out.format("Move Chosen: %s, %s\n", bestMove.getVerse(), bestMove.getColumn());
-        addPawn(bestMove.getVerse(), bestMove.getColumn(), turn);
+        addPawn(bestMove.getVerse(), bestMove.getColumn(), activePlayer.getColor());
+    }
+
+    private void updateScore(){
+        user.setScore(0);
+        computer.setScore(0);
+        for(int v = 0; v < boardSize; ++v){
+            for(int c = 0; c < boardSize; ++c){
+                if(board.get(v,c) != null && board.get(v,c).getColor() == user.getColor())
+                    user.setScore(user.getScore()+1);
+                else
+                    computer.setScore(computer.getScore()+1);
+            }
+        }
+    }
+
+    public int getUserScore() {
+        return user.getScore();
+    }
+
+    public int getComputerScore() {
+        return computer.getScore();
     }
 }

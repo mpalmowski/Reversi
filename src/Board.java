@@ -189,4 +189,10 @@ public class Board {
 
         return result;
     }
+
+    public boolean movePossible(PawnColor color){
+        return !findPossibleMoves(color).isEmpty();
+    }
+
+
 }

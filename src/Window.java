@@ -5,9 +5,10 @@ import java.awt.*;
  * Main window of the application
  */
 class Window extends Canvas {
+    JFrame frame;
 
     Window(int width, int height, String title, View view) {
-        JFrame frame = new JFrame(title);
+        frame = new JFrame(title);
         Dimension dimension = new Dimension(0, 0);
 
         frame.setPreferredSize(dimension);
@@ -28,5 +29,9 @@ class Window extends Canvas {
         frame.setPreferredSize(dimension);
         frame.setMaximumSize(dimension);
         frame.setMinimumSize(dimension);
+    }
+
+    public JFrame getFrame() {
+        return frame;
     }
 }

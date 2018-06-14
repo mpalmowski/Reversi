@@ -1,8 +1,10 @@
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 
 public class View extends Canvas {
     private int width, height;
+    Window window;
 
     View(int width, int height){
         this.width = width;
@@ -30,6 +32,10 @@ public class View extends Canvas {
     }
 
     private void createWindow() {
-        new Window(width, height, "Reversi", this);
+        window = new Window(width, height, "Reversi", this);
+    }
+
+    public void showDialog(String msg){
+        JOptionPane.showMessageDialog(window.getFrame(), msg);
     }
 }
