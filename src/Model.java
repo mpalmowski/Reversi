@@ -3,6 +3,7 @@ import java.awt.*;
 class Model {
     private static final int boardSize = 8;
 
+    private static final boolean PvP = false;
     private static final String BG_PATH = "Board.png";
     private static final String PAWN_BLACK = "Black.png";
     private static final String PAWN_WHITE = "White.png";
@@ -55,14 +56,14 @@ class Model {
     }
 
     void tick(){
-        if(activePlayer == computer){
+        if(!PvP && activePlayer == computer){
             computersMove();
             switchTurn();
         }
     }
 
     void FieldChosen(int x, int y) {
-        if(activePlayer == computer)
+        if(!PvP && activePlayer == computer)
             return;
         int verse = getVerse(y);
         int column = getColumn(x);
