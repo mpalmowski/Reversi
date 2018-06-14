@@ -4,6 +4,7 @@ public class Board {
     private int size;
     private Pawn pawns[][];
     private int nrOfPawns = 0;
+    private static final int iterations = 3;
 
     Board(int size) {
         this.size = size;
@@ -107,7 +108,7 @@ public class Board {
             tempBoard.pawns[v][c] = new Pawn(color);
             tempBoard.valueMove(move, true);
 
-            max = tempBoard.predictMoves(3, true, color == PawnColor.white ? PawnColor.black : PawnColor.white);
+            max = tempBoard.predictMoves(iterations, true, color == PawnColor.white ? PawnColor.black : PawnColor.white);
 
             move.setPoints(-max);
             move.setPoints(move.getPoints() + valueMove(move, false));
