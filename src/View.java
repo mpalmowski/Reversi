@@ -6,7 +6,7 @@ public class View extends Canvas {
     private int width, height;
     private Window window;
 
-    View(int width, int height){
+    View(int width, int height) {
         this.width = width;
         this.height = height;
         createWindow();
@@ -35,7 +35,7 @@ public class View extends Canvas {
         window = new Window(width, height, "Reversi", this);
     }
 
-    public void showDialog(String msg){
+    public void showDialog(String msg) {
         JOptionPane.showMessageDialog(window.getFrame(), msg);
     }
 }

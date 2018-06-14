@@ -15,7 +15,7 @@ class Pawn {
         this.color = color;
     }
 
-    Pawn(Pawn other){
+    Pawn(Pawn other) {
         this.x = other.x;
         this.y = other.y;
         this.size = other.size;
@@ -23,15 +23,15 @@ class Pawn {
         this.color = other.color;
     }
 
-    Pawn(PawnColor color){
+    Pawn(PawnColor color) {
         this.color = color;
     }
 
-    void render(Graphics graphics){
-        if(model == null)
+    void render(Graphics graphics) {
+        if (model == null)
             return;
 
-        switch(color){
+        switch (color) {
             case black:
                 graphics.drawImage(model.getBlackPawn().getBufferedImage(), x, y, size, size, null);
                 break;

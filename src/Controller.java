@@ -1,11 +1,15 @@
-public class Controller implements Runnable{
+public class Controller implements Runnable {
     private View view;
     private Model model;
     private static final int width = 300, height = 300;
     private boolean running = true;
     private long timer;
 
-    Controller(){
+    public static void main(String[] args) {
+        new Controller();
+    }
+
+    Controller() {
 
         view = new View(width, height);
         view.addMouseListener(new MouseListener(this));
@@ -49,7 +53,7 @@ public class Controller implements Runnable{
         timer = System.currentTimeMillis();
     }
 
-    public void stop(){
+    public void stop() {
         running = false;
     }
 }

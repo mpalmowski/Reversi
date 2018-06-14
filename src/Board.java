@@ -4,7 +4,7 @@ public class Board {
     private int size;
     private Pawn pawns[][];
     private int nrOfPawns = 0;
-    private static final int iterations = 3;
+    private static final int opponentMovesPredicted = 2;
 
     Board(int size) {
         this.size = size;
@@ -14,7 +14,7 @@ public class Board {
     private void copy(Board other) {
         for (int i = 0; i < size; ++i) {
             for (int j = 0; j < size; ++j) {
-                if(other.get(i,j) == null)
+                if (other.get(i, j) == null)
                     pawns[i][j] = null;
                 else
                     pawns[i][j] = new Pawn(other.get(i, j));
@@ -39,7 +39,7 @@ public class Board {
             }
         }
 
-        if(nrOfPawns >= 4 && points == 0){
+        if (nrOfPawns >= 4 && points == 0) {
             pawns[verse][column] = null;
             return false;
         }
@@ -108,7 +108,7 @@ public class Board {
             tempBoard.pawns[v][c] = new Pawn(color);
             tempBoard.valueMove(move, true);
 
-            max = tempBoard.predictMoves(iterations, true, color == PawnColor.white ? PawnColor.black : PawnColor.white);
+            max = tempBoard.predictMoves(opponentMovesPredicted * 2 - 1, true, color == PawnColor.white ? PawnColor.black : PawnColor.white);
 
             move.setPoints(-max);
             move.setPoints(move.getPoints() + valueMove(move, false));
@@ -139,7 +139,7 @@ public class Board {
                     points = valueMove(new Move(v, c), false);
                     pawns[v][c] = null;
 
-                    if(points > 0)
+                    if (points > 0)
                         possibleMoves.add(new Move(v, c));
                 }
             }
@@ -189,9 +189,9 @@ public class Board {
             else
                 move.setPoints(tempBoard.predictMoves(steps--, !max, color == PawnColor.white ? PawnColor.black : PawnColor.white));
 
-            if(max && move.getPoints() > result)
+            if (max && move.getPoints() > result)
                 result = move.getPoints();
-            else if(!max && move.getPoints() < result)
+            else if (!max && move.getPoints() < result)
                 result = move.getPoints();
 
             tempBoard.copy(this);
@@ -200,7 +200,7 @@ public class Board {
         return result;
     }
 
-    public boolean movePossible(PawnColor color){
+    public boolean movePossible(PawnColor color) {
         return !findPossibleMoves(color).isEmpty();
     }
 

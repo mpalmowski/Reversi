@@ -55,26 +55,26 @@ class Model {
         return blackPawn;
     }
 
-    void tick(){
-        if(!PvP && activePlayer == computer){
+    void tick() {
+        if (!PvP && activePlayer == computer) {
             computersMove();
             switchTurn();
         }
     }
 
     void FieldChosen(int x, int y) {
-        if(!PvP && activePlayer == computer)
+        if (!PvP && activePlayer == computer)
             return;
         int verse = getVerse(y);
         int column = getColumn(x);
-        if (board.get(verse,column) == null) {
-            if(addPawn(verse, column, activePlayer.getColor()))
+        if (board.get(verse, column) == null) {
+            if (addPawn(verse, column, activePlayer.getColor()))
                 switchTurn();
         }
     }
 
     private boolean addPawn(int verse, int column, PawnColor color) {
-        Pawn pawn =  new Pawn(column * width / boardSize, verse * height / boardSize, pawn_size, this, color);
+        Pawn pawn = new Pawn(column * width / boardSize, verse * height / boardSize, pawn_size, this, color);
         return board.addPawn(verse, column, pawn);
     }
 
@@ -93,26 +93,26 @@ class Model {
             activePlayer = user;
 
         updateScore();
-        if(!board.movePossible(activePlayer.getColor()))
+        if (!board.movePossible(activePlayer.getColor()))
             controller.stop();
     }
 
-    private void computersMove(){
+    private void computersMove() {
         Move bestMove = board.minMax(activePlayer.getColor());
-        if(bestMove.getVerse() == -1)
+        if (bestMove.getVerse() == -1)
             return;
         addPawn(bestMove.getVerse(), bestMove.getColumn(), activePlayer.getColor());
     }
 
-    private void updateScore(){
+    private void updateScore() {
         user.setScore(0);
         computer.setScore(0);
-        for(int v = 0; v < boardSize; ++v){
-            for(int c = 0; c < boardSize; ++c){
-                if(board.get(v,c) != null && board.get(v,c).getColor() == user.getColor())
-                    user.setScore(user.getScore()+1);
+        for (int v = 0; v < boardSize; ++v) {
+            for (int c = 0; c < boardSize; ++c) {
+                if (board.get(v, c) != null && board.get(v, c).getColor() == user.getColor())
+                    user.setScore(user.getScore() + 1);
                 else
-                    computer.setScore(computer.getScore()+1);
+                    computer.setScore(computer.getScore() + 1);
             }
         }
     }
