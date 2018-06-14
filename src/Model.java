@@ -67,14 +67,14 @@ class Model {
         int verse = getVerse(y);
         int column = getColumn(x);
         if (board.get(verse,column) == null) {
-            addPawn(verse, column, turn);
-            switchTurn();
+            if(addPawn(verse, column, turn))
+                switchTurn();
         }
     }
 
-    private void addPawn(int verse, int column, PawnColor color) {
+    private boolean addPawn(int verse, int column, PawnColor color) {
         Pawn pawn =  new Pawn(column * width / boardSize, verse * height / boardSize, pawn_size, this, color);
-        board.addPawn(verse, column, pawn);
+        return board.addPawn(verse, column, pawn);
     }
 
     private int getColumn(int x) {

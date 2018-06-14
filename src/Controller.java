@@ -31,10 +31,10 @@ public class Controller implements Runnable{
 
         while (true) {
             view.render(model);
-            model.tick();
             framesPerSecond++;
 
             if (System.currentTimeMillis() - timer > 1000) {
+                model.tick();
                 timer = System.currentTimeMillis();
                 System.out.print("FPS: " + framesPerSecond + System.lineSeparator());
                 framesPerSecond = 0;

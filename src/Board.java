@@ -3,6 +3,7 @@ import java.util.LinkedList;
 public class Board {
     private int size;
     private Pawn pawns[][];
+    private int nrOfPawns = 0;
 
     Board(int size) {
         this.size = size;
@@ -21,16 +22,26 @@ public class Board {
         return pawns[verse][column];
     }
 
-    void addPawn(int verse, int column, Pawn pawn) {
+    boolean addPawn(int verse, int column, Pawn pawn) {
         pawns[verse][column] = pawn;
+        int points = 0;
+
         for (int i = -1; i <= 1; ++i) {
             for (int j = -1; j <= 1; ++j) {
                 if (i == 0 && j == 0)
                     continue;
 
-                searchForSequence(verse, column, i, j);
+                points += searchForSequence(verse, column, i, j);
             }
         }
+
+        if(nrOfPawns >= 4 && points == 0){
+            pawns[verse][column] = null;
+            return false;
+        }
+
+        nrOfPawns++;
+        return true;
     }
 
     private int searchForSequence(int start_v, int start_c, int delta_v, int delta_c) {
@@ -79,35 +90,29 @@ public class Board {
     }
 
     Move minMax(PawnColor color) {
-        LinkedList<Move> possibleMoves = findPossibleMoves();
+        LinkedList<Move> possibleMoves = findPossibleMoves(color);
 
         int v, c;
-        LinkedList<Move> opponentMoves;
         int max;
+
         for (Move move : possibleMoves) {
             v = move.getVerse();
             c = move.getColumn();
 
             pawns[v][c] = new Pawn(color);
 
-            opponentMoves = findPossibleMoves();
+            max = predictMoves(3, true, color == PawnColor.white ? PawnColor.black : PawnColor.white);
 
-            max = Integer.MIN_VALUE;
-            for(Move opponentmove : opponentMoves){
-                opponentmove.setPoints(valueMove(opponentmove));
-                if(opponentmove.getPoints() > max)
-                    max = opponentmove.getPoints();
-            }
-
-            move.setPoints(max);
+            move.setPoints(-max);
+            move.setPoints(move.getPoints() + valueMove(move));
             pawns[v][c] = null;
         }
 
-        int min = Integer.MAX_VALUE;
+        max = Integer.MIN_VALUE;
         Move bestMove = new Move(-1, -1);
-        for(Move move : possibleMoves){
-            if(move.getPoints() < min) {
-                min = move.getPoints();
+        for (Move move : possibleMoves) {
+            if (move.getPoints() > max) {
+                max = move.getPoints();
                 bestMove = move;
             }
         }
@@ -115,13 +120,19 @@ public class Board {
         return bestMove;
     }
 
-    private LinkedList<Move> findPossibleMoves() {
+    private LinkedList<Move> findPossibleMoves(PawnColor color) {
         LinkedList<Move> possibleMoves = new LinkedList<>();
+        int points;
 
         for (int v = 0; v < size; ++v) {
             for (int c = 0; c < size; ++c) {
                 if (pawns[v][c] == null) {
-                    possibleMoves.add(new Move(v, c));
+                    pawns[v][c] = new Pawn(color);
+                    points = valueMove(new Move(v, c));
+                    pawns[v][c] = null;
+
+                    if(points > 0)
+                        possibleMoves.add(new Move(v, c));
                 }
             }
         }
@@ -129,7 +140,7 @@ public class Board {
         return possibleMoves;
     }
 
-    private int valueMove(Move move){
+    private int valueMove(Move move) {
         int points = 0;
 
         for (int i = -1; i <= 1; ++i) {
@@ -142,5 +153,40 @@ public class Board {
         }
 
         return points;
+    }
+
+    private int predictMoves(int steps, boolean max, PawnColor color) {
+        int result;
+        int v, c;
+        int points;
+
+        if (max)
+            result = Integer.MIN_VALUE;
+        else
+            result = Integer.MAX_VALUE;
+
+        LinkedList<Move> possibleMoves = findPossibleMoves(color);
+        for (Move move : possibleMoves) {
+            v = move.getVerse();
+            c = move.getColumn();
+
+            pawns[v][c] = new Pawn(color);
+
+            points = valueMove(move);
+
+            if (steps == 0)
+                move.setPoints(points);
+            else
+                move.setPoints(predictMoves(steps--, !max, color == PawnColor.white ? PawnColor.black : PawnColor.white));
+
+            if(max && move.getPoints() > result)
+                result = move.getPoints();
+            else if(!max && move.getPoints() < result)
+                result = move.getPoints();
+
+            pawns[v][c] = null;
+        }
+
+        return result;
     }
 }
